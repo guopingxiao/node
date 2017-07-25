@@ -217,3 +217,55 @@ client.js
 可以见具体的api文档
 
 
+Buffer在nodejs中用来处理二进制的数组（js字符串是用utf-8存储的，处理二进制的能力是很弱的，而网络层对资源的请求，响应等基本以二进制来进行交互）创建一个专门存储二进制的缓存区，并提供了一些方法对这些缓存区的数据做进一步的处理
+buffer在nodejs里可全局访问
+
+
+## buffer实例化
+```
+1. new Buffer('hello 你好');//以默认编码格式utf-8进行字符转换
+2. new Buffer('hello 你好','base64');//将默认编码格式修改为base64
+3. var buf = new Buffer(8);//设置缓存区的大小
+   buf.length; //8
+4. var buf = new Buffer('12345678');
+   console.log(buf) //buf长度为8
+5. var buf = new Buffer(7);
+   buf.write('12345678');
+   console.log(buf) //只要指定了buf长度，超出了都不会被缓存
+6. var buf = new Buffer([1,2,3,4]);//经过数组初始化
+   console.log(buf[1])//值为2. 可以通过下标来访问，如果值为小数，会直接取整数。
+```
+
+poolSize:内存载体的容量
+isBuffer:是否为buffer类型对象
+compare:用来判断两个buffer对象的相对位置
+isEncoding:判断nodejs是否支持某种编码
+concat:将几个buffer对象连接创建一个新的buffer对象
+byteLength:获得指定编码下字符串所占的字节数
+
+
+对Unicode编码的数据很容易处理的但是对于二进制数据就没什么处理方法了。但是在一些TCP数据流或者在操作一些文件数据流的时候，字节流的处理方法还是必须的。nodeJS中便出了处理的策略方法~提供了与String类似对等的全局构造函数Buffer（与其说与String对等，还不如说与Array类似但是有些不同方面还是需要注意），全局那么自然就不要每次的require了。Buffer则node中储存二进制数据的中介者。
+
+光说不练瞎扯淡
+
+要让网页中的base64格式生效，得写成：data:image/png;base64,iVB...
+
+Buffer用来保存原始数据（适合小文件，单个图片等，一次性全部存到buffer内存中），流是用来暂存和移动数据的（适合大文件，类似视频文件等，不用全部占用内存，通过流事件来实现边读边写的过程），两个常常结合使用比较好
+
+fs.createReadStream(); 有 data 事件、readable事件、end事件；
+暂停读取时 readStream.pause(); 恢复是 readStream.resume();
+
+cat *.js | grep http
+查找当前目录下，含有'http'字符串的所有js文件
+
+Node.js 中有四种基本的流类型：
+
+Readable - 可读的流 (例如 fs.createReadStream()).
+Writable - 可写的流 (例如 fs.createWriteStream()).
+Duplex - 可读写的流 (例如 net.Socket).
+Transform - 在读写过程中可以修改和变换数据的 Duplex 流 (例如 zlib.createDeflate()).
+
+TransformStream 是用来添加一些前后缀，不保留数据
+rs.pipe(ts).pipe(ws);
+rs可读流负责读取数据，ws 可写流 负责消费数据
+
