@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://unpkg.com/mockjs"></script>
+    <script src="https://unpkg.com/jquery"></script>
+    <script>
+        /**
+                    我们要请求一个/users的后端接口，但是后端还没有开发完成，那我们用假的数据模拟；
+                */
+        // $.get('./users.json', function(res){
+        //     console.log(res);
+        // })
+
+        /**
+            mock.js 拦截请求，返回假数据
+        */
+        Mock.mock('/users', 'get',
+            Mock.mock({
+                "string|1-10": "★"
+            })
+        )
+
+        $.get('/users', function(res){
+            console.log(res)
+        })
+    </script>
+</body>
+
+</html>
